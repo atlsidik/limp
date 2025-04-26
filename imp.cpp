@@ -1,22 +1,16 @@
-//#include "implemnt.h"
 #include <cctype>
 #include <cstdio>
 #include <cstring>
 #include <exception>
-#include <ios>
 #include <iostream>
 #include <stdio.h>
 #include <fstream>
-#include <streambuf>
 #include <string>
-#include <filesystem>
-//#include "implemnt.h"
  
 extern std::ifstream& read_impl_file(std::ifstream& fIn,std::string name);
 extern std::ifstream& read_interf_file(std::ifstream& fIn);
 extern void copy_to_file(const char v[]  ,std::string n);
 extern char temp_file[];
-//extern int line_count;
 
 
 int  main (int argc, char *argv[]) {
@@ -69,13 +63,6 @@ catch(std::exception& e){
 	if(std::remove(temp_file))
 		std::cout<<"operation success";
 	
-/*
-std::cout<<"printing interface lines\n";
-for (int i =0;  i < line_count; i++) {
-	std::cout<<interf_lines[i]->str<<std::endl;
-	
-}
-*/
 	return 0;
 }
 

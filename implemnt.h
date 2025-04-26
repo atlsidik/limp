@@ -1,12 +1,9 @@
 #ifndef IMPLMNT_H 
 #define IMPLMNT_H
-#include <cctype>
-#include <cstdio>
 #include <cstring>
 #include <exception>
 #include <ios>
 #include <iostream>
-#include <stdio.h>
 #include <fstream>
 #include <streambuf>
 #include <string>
@@ -14,22 +11,22 @@
 
 extern std::ifstream& read_impl_file(std::ifstream& fIn,std::string name);
 extern std::ifstream& read_interf_file(std::ifstream& fIn);
-extern int line_count =0 ;
+//extern int line_count =0 ;
 std::ifstream& read_word(std::ifstream& fIn, char word[],int& num);
 std::ifstream& read_first_line(std::ifstream& fIn,char line[], int max);
-char interface_name[25], new_first_line[200];
+//char interface_name[25], new_first_line[200];
 std::ifstream& read_comments(std::ifstream& fIn);
 bool process_line(const char line[],int max);
 int read_one_wrd(const char f[],char w[], int index);
 std::ifstream& read_rest_of_interf(std::ifstream& fIn);
-bool isMethod =false;
-extern int return_count ;
+//bool isMethod =false;
+//extern int return_count ;
 char* determ_return_types(char line[] );
 bool check_word(const char[] ,char[]);
 std::ifstream& 	read_rest_of_edit_file(std::ifstream& fIn, std::string );
 std::ofstream& add_interf_lines(std::ofstream&);
 extern void copy_to_file(const char v[]  ,std::string n);
-char temp_file[] = "tmp.txt";
+//char temp_file[] = "tmp.txt";
 
 
 struct interf_line{
@@ -66,7 +63,7 @@ struct interf_line{
 		std::strcpy(str,temp);
 		delete[] temp;
 	}
-}  *interf_lines[20];
+}; //*inerf_lines[20];
 
 
 

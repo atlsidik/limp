@@ -8,157 +8,28 @@
 #include <fstream>
 #include <streambuf>
 #include <string>
-#include <filesystem>
 
 #include "implemnt.h"
 
-/*
-#include <cctype>
-#include <cstdio>
-#include <cstring>
-#include <exception>
-#include <ios>
-#include <iostream>
-#include <stdio.h>
-#include <fstream>
-#include <streambuf>
-#include <string>
-#include <filesystem>
 
-std::ifstream& read_impl_file(std::ifstream& fIn,std::string name);
-std::ifstream& read_interf_file(std::ifstream& fIn);
-char *lines[30];
-int line_count =0;
-std::ifstream& read_word(std::ifstream& fIn, char word[],int& num);
-std::ifstream& read_first_line(std::ifstream& fIn,char line[], int max);
 char interface_name[25], new_first_line[200];
-std::ifstream& read_comments(std::ifstream& fIn);
-bool process_line(const char line[],int max);
-int read_one_wrd(const char f[],char w[], int index);
-std::ifstream& read_rest_of_interf(std::ifstream& fIn);
 bool isMethod =false;
-char *return_types[15];
-int return_count =0;
-char *wordarr[10];
-char* determ_return_types(char line[] );
-bool check_word(const char[] ,char[]);
-std::ifstream& 	read_rest_of_edit_file(std::ifstream& fIn, std::string );
-std::ofstream& add_interf_lines(std::ofstream&);
-void copy_to_file(const char[] ,std::string);
 char temp_file[] = "tmp.txt";
+ int line_count =0 ;
+struct interf_line *interf_lines[20];
 
-
-struct interf_line{
-	char str[150];
-	interf_line(char line[],char ret_statement[]){
-		rem_semi(line, 150);
-	std::strcat(line,ret_statement);
-	std::strcpy(str,line);
-	}
-	void rem_semi(char str[],int length){
-		char *temp = new char[length];
-	//	std::strcpy(str,temp);
-		char c;
-		int i;
-		for(i = 0,  c = temp[0];( i< length) ; i++){
-		char c = str[i];
-		if(c!=';'){
-		temp[i]=c;
-		}
-		if (c =='\0') {
-		temp[i] = c;
-		break;
-		}
-
-		}
-		delete[] str;
-		str = new char[length];
-		std::strcpy(str,temp);
-		delete[] temp;
-	//	return temp;
-	}
-} *interf_lines[10];
-
-
-
-
-
-int  main (int argc, char *argv[]) {
-	std::string impl_file_name, interf_file_name;
-	if (argc != 3) {
-		std::cout <<"Incorect number of arguments";
-		return 1;
-	}
-		impl_file_name = argv[1];
-		interf_file_name = argv[2];
-	try{
-	std::ifstream file_to_impl(impl_file_name);
-
-	std::ifstream interface_file(interf_file_name);
-	
-	bool done = false;
-
-	if (interface_file.is_open()) {
-		std::cout<<"Begin reading file to interface_file\n";
-		read_interf_file(interface_file);
-	
-		std::cout<<"done with interface\n";
-	}
-	else {
-		std::cout<<"Error opening interface_file \n";
-
-	}
-	if (file_to_impl.is_open()) {
-		std::cout<<"Begin reading file to edit\n";
-		read_impl_file(file_to_impl,impl_file_name);
-
-		std::cout<<"done wth file to edit\n";
-		done = true;
-	}
-	else {
-		std::cout<<"Error opening file to edit\n ";
-	}
-
-
-
-
-}
-catch(std::exception& e){
-	std::cout<<"Failed"<< e.what()<<"\n";
-}
-	copy_to_file(temp_file, impl_file_name);
-	if(std::remove(temp_file))
-		std::cout<<"operation success";
-	
-std::cout<<"printing interface lines\n";
-for (int i =0;  i < line_count; i++) {
-	std::cout<<interf_lines[i]->str<<std::endl;
-	
-}
-
-
-
-
-	return 0;
-}
-*/
-
-//extern int line_count =0;
 
 std::ifstream& read_interf_file(std::ifstream& fIn){
 	char c ;
 	 fIn.get(c);
-//	std::cout<<"\nbegin trailing line loop\n";
 	while((!isalpha(c)) && fIn.get(c)){
 			 
 	}
-//	std::cout<<"exit loop\n";
 	
 	fIn.putback(c);
-//	std::unique_ptr<char> word ;
-	char *word ;	//word[0] = c;
+	char *word ;	
 	int i =0, num=5;
-	//word[20]='\0';
+
 	 int brace_enc = 0;
 
 	while(!brace_enc){
@@ -175,10 +46,6 @@ std::ifstream& read_interf_file(std::ifstream& fIn){
 
 	 std::strcpy(interface_name,word);
 	 delete[] word;
-	// read_first_line(fIn,first_line,150);
-	// std::cout<<first_line<<std::endl;
-//	 std::strcat(first_line,word);
-//
 	read_rest_of_interf(fIn);
 	 return fIn;
 
@@ -187,8 +54,6 @@ std::ifstream& read_interf_file(std::ifstream& fIn){
 }
 
 	std::ifstream& read_rest_of_interf(std::ifstream& fIn){
-		//char *lines[15];
-	//	int line_count =0;
 		while(!fIn.eof()){
 		char c;
 		 read_comments(fIn);
@@ -198,11 +63,9 @@ std::ifstream& read_interf_file(std::ifstream& fIn){
 	 bool isMethod = false;
 	 fIn.getline(newLine,300);
 	isMethod= process_line(newLine,300);
-//	std::cout<<newLine;
 
 		if (isMethod) {
 		std::cout<<'\n'<<"yes"<<'\n';
-		//lines[line_count++] = newLine;
 		char *ret = determ_return_types( newLine );
 		char *temp_str = new char[300], *temp_ret = new char[100];
 		strcpy(temp_str,newLine);
@@ -212,28 +75,10 @@ std::ifstream& read_interf_file(std::ifstream& fIn){
 			delete[] temp_str;
 		}
 		else{
-	//	std::cout<<"no"<<'\n';
 		delete[] newLine;
 		}
-		/*
-		while((fIn.get(c)) && !isalpha(c) && c!='}')
-			;
-
-		if(isalpha(c))
-			fIn.putback(c);
-		if(c=='}'){
-			fIn.putback(c);
-			break;
-		}
-		*/
 
 	}
-		/*for(int i =0 ; i < line_count; i++){
-			char temp[150];
-		std::strcpy(temp,interf_lines[i]->str);
-			std::cout<<temp<<std::endl;
-		}*/
-
 		return fIn;
 
 	}
@@ -270,14 +115,9 @@ while(c!= '(' && c!='\0' && (not_done)){
 	}
 	word[j]='\0';
 	if (j > 0) { 
-	//	return_types[return_count++] = word;
-          //  std::cout << word << std::endl;
-		//	char *ret_stat = new char[50];
 			not_done = check_word(word,ret_stat);
 
 			if(not_done){
-			//	delete[] ret_stat;
-			//	delete[] word;
 			}
 			else{
 			std::cout<<word<<std::endl;
@@ -370,7 +210,6 @@ std::ifstream& read_comments(std::ifstream& fIn){
  std::ifstream& read_word(std::ifstream& fIn, char word[], int& num){
 	char c ;
 	int i=0;
-//	empty_word(word);
 	fIn.get(c);
 	while(c!=' '){
 		word[i]=c;
@@ -389,7 +228,6 @@ std::ifstream& read_comments(std::ifstream& fIn){
 	}
 
 	word[i]= '\0';
-//std::cout<<word<<"\t \t";
 return fIn;
 
 
@@ -403,13 +241,10 @@ fIn.putback(c);
 
 int i =0;
 	while(fIn.get(c) && c!='{' && i<max){
-	//	std::cout<<c<<"   " ;
 		line[i++] =c;
 	}
 	line[i]='\0';
-//	std::cout<<line[i];
 	
-//fIn.putback(c);
 
 return fIn;
 }
@@ -418,8 +253,6 @@ return fIn;
 std::ifstream& read_impl_file(std::ifstream& fIn,std::string name){
 	read_first_line(fIn, new_first_line, 200);
 	std::strcat(interface_name," {");
-//	std::strcpy(ne/w_first_line,f_l);
-//	std::strcpy(new_first_line,interface_name);
 
 	std::strcat(new_first_line," implements ");
 	std::strcat(new_first_line,interface_name);
@@ -433,26 +266,19 @@ return fIn;
 std::ifstream& read_rest_of_edit_file(std::ifstream& fIn,std::string file_name){
 	std::ofstream ostr("tmp.txt", std::ios_base::out | std::ios_base::trunc);
 	if(ostr.is_open()){
-//	std::streambuf* saw  = ostr.rdbuf() ;
-//	saw->open("temp.txt",std::ios_base::out);
 	
-	//	std::cout<<"success"<<std::endl;
-	//
 	
 	int first_seq_count =0;
 	char first_seq_ch = new_first_line[0];
 		while ( first_seq_ch!='\0' ) {
-			//	saw->sputc(first_seq_ch);
 				first_seq_ch  = new_first_line[first_seq_count++];
 				if(first_seq_ch!='\0')
 					ostr.put(first_seq_ch);
-		//	std::cout<<first_seq_ch<<"   ";
 
 			}
 			
 			char c ;
 			bool empty_file = false;
-             // saw->sputc('x');
 		
 			 fIn.get(c);
 			
@@ -497,8 +323,6 @@ std::ifstream& read_rest_of_edit_file(std::ifstream& fIn,std::string file_name){
 			
 			
 			
-		//	ostr.flush();
-		//	ostr.close();
 	
 	}
 	else{
@@ -509,7 +333,6 @@ std::ifstream& read_rest_of_edit_file(std::ifstream& fIn,std::string file_name){
 		ostr.flush();
 		ostr.close();
 
-//   copy_to_file("temp.txt",file_name);
 	return fIn;
 }
 
@@ -528,7 +351,6 @@ std::ofstream& add_interf_lines(std::ofstream& fOut){
 		}
 		
 		fOut.put('\n');
-	//	fOut.put('\0');
 	}
 
 	fOut.put('}');
@@ -538,7 +360,6 @@ std::ofstream& add_interf_lines(std::ofstream& fOut){
 void copy_to_file(const char src_file_name[], std::string dest_file_name){
 	try{
 	std::ifstream fIn(src_file_name);
-//	std::ofstream be();
 	std::ofstream fOut(dest_file_name, std::ios_base::trunc );
 	std::streambuf *src_buf, *dest_buf;
 
@@ -552,11 +373,6 @@ void copy_to_file(const char src_file_name[], std::string dest_file_name){
 			dest_buf->sputc(c);
 			c = src_buf->sbumpc();
 		}
-		/*
-		fOut.flush();
-		fIn.close();
-		fOut.close();
-		*/
 		
 
 
@@ -570,7 +386,7 @@ void copy_to_file(const char src_file_name[], std::string dest_file_name){
 		fOut.close();
 	}
 	catch(std::exception e ){
-			std::cerr<<"wtf";
+			std::cerr<<"error";
 	}
 
 
